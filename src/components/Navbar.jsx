@@ -1,8 +1,8 @@
 
 import React from "react";
+import { MdCall, MdSettings } from "react-icons/md";
 import { GoPerson } from "react-icons/go";
 import { IoIosKeypad } from "react-icons/io";
-import { MdCall, MdSettings } from "react-icons/md";
 
 const Navbar = () => {
   return (

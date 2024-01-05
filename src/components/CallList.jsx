@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { getCallList } from "../services/call";
+import ArchivedCall from "./ArchivedCall";
+import UnArchivedCall from "./UnArchivedCall";
 import "../App.css";
 import ArchiveIcon from "../assests/archive.png";
-import { getCallList } from '../services/call';
-import ArchivedCall from './ArchivedCall';
-import Navbar from './Navbar';
-import UnArchivedCall from './UnArchivedCall';
-
+import Navbar from "./Navbar";
+import TopNavbar from "./TopNavbar";
+import { MdOutlineArchive } from "react-icons/md";
+import AllCall from "./AllCall";
 
 const options = [
   {
     id: "1",
-    created_at: "2024-01-04T12:00:00",
+    created_at: "2024-01-05T12:00:00",
     direction: "inbound",
     from: "123-456-7890",
     to: "987-654-3210",
@@ -32,7 +34,7 @@ const options = [
   },
   {
     id: "3",
-    created_at: "2024-01-04T12:30:00",
+    created_at: "2024-01-03T12:30:00",
     direction: "inbound",
     from: "345-678-9012",
     to: "789-012-3456",
@@ -43,18 +45,18 @@ const options = [
   },
   {
     id: "4",
-    created_at: "2024-01-04T12:45:00",
+    created_at: "2024-01-02T12:45:00",
     direction: "outbound",
     from: "789-012-3456",
     to: "123-456-7890",
     via: "Aircall-4",
     duration: 150,
-    is_archived: true,
+    is_archived: false,
     call_type: "answered",
   },
   {
     id: "5",
-    created_at: "2024-01-04T13:00:00",
+    created_at: "2023-12-02T13:00:00",
     direction: "inbound",
     from: "234-567-8901",
     to: "345-678-9012",
@@ -65,13 +67,13 @@ const options = [
   },
   {
     id: "6",
-    created_at: "2024-01-04T13:15:00",
+    created_at: "2023-12-25T13:15:00",
     direction: "outbound",
     from: "456-789-0123",
     to: "567-890-1234",
     via: "Aircall-6",
     duration: 210,
-    is_archived: true,
+    is_archived: false,
     call_type: "answered",
   },
   {
@@ -93,12 +95,12 @@ const options = [
     to: "789-012-3456",
     via: "Aircall-8",
     duration: 120,
-    is_archived: true,
+    is_archived: false,
     call_type: "missed",
   },
   {
     id: "9",
-    created_at: "2024-01-04T14:00:00",
+    created_at: "2024-01-03T14:00:00",
     direction: "inbound",
     from: "789-012-3456",
     to: "123-456-7890",
@@ -109,26 +111,24 @@ const options = [
   },
   {
     id: "10",
-    created_at: "2024-01-04T14:15:00",
+    created_at: "2024-01-02T14:15:00",
     direction: "outbound",
     from: "123-456-7890",
     to: "234-567-8901",
     via: "Aircall-10",
     duration: 150,
-    is_archived: true,
+    is_archived: false,
     call_type: "voicemail",
   },
 ];
 
-
 const CallList = () => {
-
-
-
-  const [archivedCallList, setArchivedCallList] = useState([])
-  const [checkArchived, setCheckArchived] = useState(false)
+  const [archivedCallList, setArchivedCallList] = useState([]);
+  const [checkArchived, setCheckArchived] = useState(false);
   const [callList, setCallList] = useState([]);
-  const [flag, setflag] = useState(false)
+  const [flag, setflag] = useState(false);
+  const [currentTab, setCurrentTab] = useState()
+  const [allCallsList, setAllCallsList] = useState([])
 
   const sortCallList = (list) => {
     const sortedArchivedCalllist = list.sort((a, b) => {
@@ -136,23 +136,33 @@ const CallList = () => {
       const dateB = new Date(b?.created_at);
       return dateB - dateA;
     });
-    return sortedArchivedCalllist
-  }
-
+    return sortedArchivedCalllist;
+  };
 
   const fetchActivitiesData = async () => {
     try {
       const response = await getCallList();
-      const data = response?.data
-      const unarchivedCalllist = data?.filter(item => item?.is_archived == false)
-      const archivedCalllist = data?.filter(item => item?.is_archived == true)
-      const sortedCallListArchived = sortCallList(archivedCalllist)
-      const sortedCallListUnArchived = sortCallList(unarchivedCalllist)
-      setArchivedCallList(sortedCallListArchived)
-      setCallList(sortedCallListUnArchived)
+      const data = response?.data || options;
+      const sortedCallList = sortCallList(data)
+      setAllCallsList(sortedCallList)
+
+
+      const unarchivedCalllist = sortedCallList?.filter(
+        (item) => item?.is_archived == false
+      );
+      const archivedCalllist = sortedCallList?.filter(
+        (item) => item?.is_archived == true
+      );
+
+      setArchivedCallList(archivedCalllist);
+      setCallList(unarchivedCalllist);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
+  };
+
+  const getTabNumber = (tabNum) => {
+    setCurrentTab(tabNum)
   }
 
   useEffect(() => {
@@ -161,45 +171,76 @@ const CallList = () => {
 
   return (
     <div className="aircall-phone-container">
-      {!checkArchived ? (
+      <TopNavbar getTabNumber={getTabNumber} />
+      {currentTab === 0 && !checkArchived && (
         <div
           style={{
             display: "flex",
             alignItems: "center",
             border: "1px solid #ccc",
-            padding: '5px',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            marginBottom: '-10px'
-
+            padding: "5px",
+            borderRadius: "10px",
+            cursor: "pointer",
+            marginBottom: "-10px",
           }}
-          onClick={() => setCheckArchived(!checkArchived)}>
-          <img src={ArchiveIcon} style={{ width: "20px", marginLeft: '10px', height: "20px", marginTop: '5px' }} />
+          onClick={() => setCheckArchived(!checkArchived)}
+        >
+          <MdOutlineArchive
+            size={25}
+            color="rgb(135 119 119)"
+            style={{ marginLeft: "10px", marginTop: "5px" }}
+          />
           <div
             className="chat-item"
             style={{
               fontSize: "20px",
               color: "gray",
               marginLeft: "1px",
-              marginBottom: '5px'
+              marginBottom: "5px",
             }}
           >
-
             Archived ({archivedCallList?.length})
           </div>
-
         </div>
+      )}
 
-      ) : null}
-      {checkArchived ? (
+
+      {currentTab === 1 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            borderBottom: "1px solid #ccc",
+          }}
+        >
+          <div
+            className="chat-item"
+            style={{
+              fontSize: "20px",
+              color: "gray",
+              marginLeft: "5px",
+              cursor: "pointer",
+            }}
+
+          >
+            Total Number of Calls ({allCallsList?.length})
+          </div>
+        </div>
+      )}
+
+      {currentTab === 0 ? (
+      checkArchived ? (
         <ArchivedCall
           list={archivedCallList}
           checkArchived={checkArchived}
           setCheckArchived={setCheckArchived}
         />
       ) : (
-        <UnArchivedCall list={callList} fetchActivitiesData={fetchActivitiesData}  />
-      )}
+        <UnArchivedCall list={callList} fetchActivitiesData={fetchActivitiesData}/>
+      )
+    ) : (
+      <AllCall list={allCallsList} />
+    )}
       <Navbar />
     </div>
   );
