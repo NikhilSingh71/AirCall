@@ -156,3 +156,12 @@ button {
   width: 30px;
   height: 30px;
 }
+.tNavbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px; /* Adjust the spacing as needed */
+}
+
+.tab {
+  margin-right: 16px;
+}
