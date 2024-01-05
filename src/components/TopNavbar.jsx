@@ -1,6 +1,5 @@
 import React from "react";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import activityCall from "../assets/activityCall.png"
+import activityCall from "../assets/activityCall.png";
 
 
 const TopNavbar = () => {

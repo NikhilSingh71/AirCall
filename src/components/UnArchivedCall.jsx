@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { archiveCall, getCallDetailsById } from "../services/call";
-import "../App.css";
-import moment from "moment";
 import Button from "@mui/material/Button";
+import moment from "moment";
+import React, { useState } from "react";
 import { MdCallMissed, MdCallReceived } from "react-icons/md";
+import "../App.css";
+import { archiveCall } from "../services/call";
 
 const UnArchivedCall = ({ list, fetchActivitiesData}) => {
   const [toggleArchiveButton, setToggleArchiveButton] = useState([])

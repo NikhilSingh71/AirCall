@@ -1,14 +1,12 @@
-import React, { useState } from "react";
-import { archiveCall, getCallDetailsById } from "../services/call";
-import "../App.css";
-import moment from "moment";
+import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import moment from "moment";
+import React, { useState } from "react";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import incommingCall from "../assests/incomming-.png";
-import { MdCallMissed } from "react-icons/md";
-import { MdCallReceived } from "react-icons/md";
+import { MdCallMissed, MdCallReceived } from "react-icons/md";
+import "../App.css";
+import { archiveCall, getCallDetailsById } from "../services/call";
 
 const AllCall = ({ list }) => {
   const [anchorEl, setAnchorEl] = useState(null);

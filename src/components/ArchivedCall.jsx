@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
-import { archiveCall, getCallDetailsById } from '../services/call'
-import moment from 'moment'
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import DownArrow from "../assests/down-arrow.png";
-import LeftArrow from "../assests/icon8-left-50.png";
+import moment from 'moment';
+import React, { useState } from 'react';
 import { MdCallMissed, MdCallReceived } from "react-icons/md";
+import LeftArrow from "../assests/icons8-left-50.png"
+
+import { archiveCall } from '../services/call';
 
 const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
   const [anchorEl, setAnchorEl] = useState(null);

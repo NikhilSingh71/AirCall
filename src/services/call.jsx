@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl, endPoint } from '../config/url';
+import { baseUrl, endPoint } from '../config/urls';
 
 export function getCallList() {
     let _url = baseUrl.baseUrl+endPoint.activities;

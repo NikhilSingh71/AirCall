@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import "../App.css";
+import ArchiveIcon from "../assests/archive.png";
 import { getCallList } from '../services/call';
 import ArchivedCall from './ArchivedCall';
-import UnArchivedCall from './UnArchivedCall';
-import "../App.css"
-import ArchiveIcon from "../assests/archive.png";
 import Navbar from './Navbar';
-import TopNavbar from './TopNavbar';
+import UnArchivedCall from './UnArchivedCall';
 
 
 const options = [
